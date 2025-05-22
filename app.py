@@ -242,19 +242,11 @@ def get_messages():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/' + token, methods=['POST'])
-def getMessage():
-    json_string = request.get_data().decode('utf-8')
-    update = types.Update.de_json(json_string)
-    bot.process_new_updates([update])
-    return "!", 200
 
 @app.route("/")
-def webhook():
-    bot.remove_webhook()
-    url = os.getenv('VERCEL_PROJECT_PRODUCTION_URL')
-    bot.set_webhook(url= f"{url}/{token}", max_connections=50)
-    return "!", 200
+def root():
+    return jsonify({"message": "AI Learner Backend is Running"}), 200
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000, debug=True)
